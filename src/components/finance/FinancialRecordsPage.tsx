@@ -262,32 +262,28 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
 
         {/* Outstanding Receivables */}
         <div
-          className={`p-4 rounded-2xl border shadow-2xs ${
-            totalOutstandingBalance > 0
-              ? 'bg-[#FBECE8] border-[#E2573A]/40'
-              : 'bg-white border-[#E4DCD0]'
-          }`}
+          className={`p-4 rounded-2xl border shadow-2xs ${totalOutstandingBalance > 0
+            ? 'bg-[#FBECE8] border-[#E2573A]/40'
+            : 'bg-white border-[#E4DCD0]'
+            }`}
         >
           <div className="flex items-center justify-between text-xs">
             <span
-              className={`font-serif font-bold uppercase tracking-wider text-[11px] ${
-                totalOutstandingBalance > 0 ? 'text-[#E2573A]' : 'text-stone-500'
-              }`}
+              className={`font-serif font-bold uppercase tracking-wider text-[11px] ${totalOutstandingBalance > 0 ? 'text-[#E2573A]' : 'text-stone-500'
+                }`}
             >
               Uncollected Receivables
             </span>
             <div
-              className={`p-1.5 rounded-lg ${
-                totalOutstandingBalance > 0 ? 'bg-white text-[#E2573A]' : 'bg-[#FAF6F0] text-stone-500'
-              }`}
+              className={`p-1.5 rounded-lg ${totalOutstandingBalance > 0 ? 'bg-white text-[#E2573A]' : 'bg-[#FAF6F0] text-stone-500'
+                }`}
             >
               <AlertCircle className="w-4 h-4" />
             </div>
           </div>
           <div
-            className={`text-2xl font-serif font-bold mt-2 ${
-              totalOutstandingBalance > 0 ? 'text-[#E2573A]' : 'text-[#3F7D5C]'
-            }`}
+            className={`text-2xl font-serif font-bold mt-2 ${totalOutstandingBalance > 0 ? 'text-[#E2573A]' : 'text-[#3F7D5C]'
+              }`}
           >
             {formatNaira(totalOutstandingBalance)}
           </div>
@@ -319,11 +315,10 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
       <div className="flex items-center gap-2 border-b border-[#E4DCD0] pb-2 text-xs font-semibold">
         <button
           onClick={() => setActiveSubTab('receivables')}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${
-            activeSubTab === 'receivables'
-              ? 'bg-[#232A5C] text-white shadow-2xs'
-              : 'bg-white text-stone-600 hover:text-[#232A5C] border border-[#E4DCD0]'
-          }`}
+          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${activeSubTab === 'receivables'
+            ? 'bg-[#232A5C] text-white shadow-2xs'
+            : 'bg-white text-stone-600 hover:text-[#232A5C] border border-[#E4DCD0]'
+            }`}
         >
           <AlertCircle className="w-3.5 h-3.5" />
           <span>Pending Balances & Settlement ({ordersWithBalance.length})</span>
@@ -331,11 +326,10 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
 
         <button
           onClick={() => setActiveSubTab('ledger')}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${
-            activeSubTab === 'ledger'
-              ? 'bg-[#232A5C] text-white shadow-2xs'
-              : 'bg-white text-stone-600 hover:text-[#232A5C] border border-[#E4DCD0]'
-          }`}
+          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${activeSubTab === 'ledger'
+            ? 'bg-[#232A5C] text-white shadow-2xs'
+            : 'bg-white text-stone-600 hover:text-[#232A5C] border border-[#E4DCD0]'
+            }`}
         >
           <Receipt className="w-3.5 h-3.5" />
           <span>Payment Transaction Journal ({allPayments.length})</span>
@@ -343,11 +337,10 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
 
         <button
           onClick={() => setActiveSubTab('breakdown')}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${
-            activeSubTab === 'breakdown'
-              ? 'bg-[#232A5C] text-white shadow-2xs'
-              : 'bg-white text-stone-600 hover:text-[#232A5C] border border-[#E4DCD0]'
-          }`}
+          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${activeSubTab === 'breakdown'
+            ? 'bg-[#232A5C] text-white shadow-2xs'
+            : 'bg-white text-stone-600 hover:text-[#232A5C] border border-[#E4DCD0]'
+            }`}
         >
           <CreditCard className="w-3.5 h-3.5" />
           <span>Payment Channel Breakdown</span>

@@ -73,10 +73,10 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   });
 
   // Sign In State
-  const [signInEmail, setSignInEmail] = useState('deola@ateliersagoe.ng');
-  const [signInPassword, setSignInPassword] = useState('••••••••');
+  const [signInEmail, setSignInEmail] = useState('');
+  const [signInPassword, setSignInPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberDevice, setRememberDevice] = useState(true);
+  const [rememberDevice, setRememberDevice] = useState(false);
 
   // Sign Up State (SAAS-1, LEGAL-1, AGT-2)
   const [newStudioName, setNewStudioName] = useState('');
@@ -365,7 +365,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       type="text"
                       value={signInEmail}
                       onChange={(e) => setSignInEmail(e.target.value)}
-                      placeholder="e.g. deola@ateliersagoe.ng or +234..."
+                      placeholder="Enter your email or phone number"
                       required
                       className="w-full pl-9 pr-3 py-2 rounded-lg border border-[#E4DCD0] text-xs focus:outline-hidden focus:border-[#232A5C]"
                     />
@@ -389,6 +389,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       type={showPassword ? 'text' : 'password'}
                       value={signInPassword}
                       onChange={(e) => setSignInPassword(e.target.value)}
+                      placeholder="Enter your password"
                       required
                       className="w-full pl-9 pr-9 py-2 rounded-lg border border-[#E4DCD0] text-xs focus:outline-hidden focus:border-[#232A5C]"
                     />
@@ -457,31 +458,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                     <span className="block text-[10px] text-stone-500">Senior Agent (25%)</span>
                   </button>
                 </div>
-
-                {/* Super Admin Full Platform Access Button */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    signIn('admin@strandend.ng');
-                    onSuccess();
-                  }}
-                  className="w-full mt-2.5 p-2.5 rounded-xl bg-[#232A5C] hover:bg-[#343D7B] text-white flex items-center justify-between text-xs font-bold transition-all border border-[#3A4585] shadow-xs cursor-pointer"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-[#8B1E1E] flex items-center justify-center shrink-0 text-white shadow-2xs">
-                      <ShieldCheck className="w-4 h-4 text-[#C9A24B]" />
-                    </div>
-                    <div className="text-left">
-                      <div className="text-white text-xs font-bold">Platform Super Admin Access</div>
-                      <div className="text-[10px] text-stone-300 font-normal">
-                        Sees everything &bull; All studios, platform MRR, and full controls
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-[10px] bg-[#C9A24B] text-[#232A5C] px-2 py-0.5 rounded font-mono font-bold shrink-0">
-                    FULL ACCESS
-                  </span>
-                </button>
               </div>
             </div>
           )}
