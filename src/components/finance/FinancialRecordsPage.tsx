@@ -312,10 +312,10 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
       </div>
 
       {/* Section Sub-Tabs */}
-      <div className="flex items-center gap-2 border-b border-[#E4DCD0] pb-2 text-xs font-semibold">
+      <div className="flex items-center gap-2 border-b border-[#E4DCD0] pb-2 text-xs font-semibold overflow-x-auto whitespace-nowrap scrollbar-none">
         <button
           onClick={() => setActiveSubTab('receivables')}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${activeSubTab === 'receivables'
+          className={`shrink-0 px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${activeSubTab === 'receivables'
             ? 'bg-[#232A5C] text-white shadow-2xs'
             : 'bg-white text-stone-600 hover:text-[#232A5C] border border-[#E4DCD0]'
             }`}
@@ -326,7 +326,7 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
 
         <button
           onClick={() => setActiveSubTab('ledger')}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${activeSubTab === 'ledger'
+          className={`shrink-0 px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${activeSubTab === 'ledger'
             ? 'bg-[#232A5C] text-white shadow-2xs'
             : 'bg-white text-stone-600 hover:text-[#232A5C] border border-[#E4DCD0]'
             }`}
@@ -337,7 +337,7 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
 
         <button
           onClick={() => setActiveSubTab('breakdown')}
-          className={`px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${activeSubTab === 'breakdown'
+          className={`shrink-0 px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${activeSubTab === 'breakdown'
             ? 'bg-[#232A5C] text-white shadow-2xs'
             : 'bg-white text-stone-600 hover:text-[#232A5C] border border-[#E4DCD0]'
             }`}
@@ -369,7 +369,8 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
 
           {/* Receivables Table */}
           <div className="bg-white rounded-2xl border border-[#E4DCD0] shadow-2xs overflow-hidden">
-            <div className="overflow-x-auto">
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="bg-[#FAF6F0] border-b border-[#E4DCD0] text-stone-600 font-serif font-bold text-[11px] uppercase tracking-wider">
@@ -481,6 +482,70 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Cards View (md:hidden) */}
+            <div className="md:hidden divide-y divide-stone-100">
+              {filteredReceivables.map((order) => {
+                const totalPaid = order.payments.reduce((sum, p) => sum + p.amount, 0);
+                const balance = order.totalPrice - totalPaid;
+                const isDelivered = order.currentStage === 'delivered';
+
+                return (
+                  <div
+                    key={order.id}
+                    onClick={() => onOpenOrder(order)}
+                    className="p-3.5 space-y-2.5 transition-colors active:bg-[#FAF6F0] cursor-pointer"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-bold text-sm text-[#232A5C]">{order.orderNumber}</span>
+                        <span className="text-xs font-semibold text-stone-700">{order.customerName}</span>
+                      </div>
+                      <div className="font-serif font-black text-sm text-[#E2573A]">
+                        {formatNaira(balance)}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[11px] text-stone-500">
+                      <span>{order.occasion} &bull; <span className="capitalize">{order.currentStage.replace(/_/g, ' ')}</span></span>
+                      <span>Total: {formatNaira(order.totalPrice)}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <DeliveryCountdownBadge
+                        expectedDeliveryDate={order.expectedDeliveryDate}
+                        isDelivered={isDelivered}
+                        size="sm"
+                      />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSettleOrder(order);
+                          setSettleMethod('Bank Transfer');
+                          setSettleNotes(`Settled final balance for Order ${order.orderNumber}`);
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-[#3F7D5C] hover:bg-[#326449] text-white font-semibold text-xs flex items-center gap-1.5 shadow-2xs"
+                      >
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Settle Balance</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {filteredReceivables.length === 0 && (
+                <div className="py-12 text-center text-stone-400 p-4">
+                  <CheckCircle2 className="w-8 h-8 mx-auto text-[#3F7D5C] opacity-60 mb-2" />
+                  <div className="font-semibold text-stone-700 text-sm">
+                    All client accounts reconciled!
+                  </div>
+                  <div className="text-xs text-stone-500 mt-0.5">
+                    No pending customer balances.
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -525,7 +590,8 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
 
           {/* Ledger Table */}
           <div className="bg-white rounded-2xl border border-[#E4DCD0] shadow-2xs overflow-hidden">
-            <div className="overflow-x-auto">
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="bg-[#FAF6F0] border-b border-[#E4DCD0] text-stone-600 font-serif font-bold text-[11px] uppercase tracking-wider">
@@ -615,6 +681,62 @@ export const FinancialRecordsPage: React.FC<FinancialRecordsPageProps> = ({ onOp
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Cards View (md:hidden) */}
+            <div className="md:hidden divide-y divide-stone-100">
+              {filteredPayments.map(({ payment, order }) => (
+                <div
+                  key={payment.id}
+                  onClick={() => onOpenOrder(order)}
+                  className="p-3.5 space-y-2 transition-colors active:bg-[#FAF6F0] cursor-pointer"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-sm text-[#232A5C]">{order.orderNumber}</span>
+                      <span className="text-[11px] font-semibold text-stone-600">{order.customerName}</span>
+                    </div>
+                    <span className="font-serif font-black text-sm text-[#3F7D5C]">
+                      +{formatNaira(payment.amount)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-stone-500">
+                    <div className="flex items-center gap-2">
+                      <span>{formatDate(payment.date)}</span>
+                      <span className="px-1.5 py-0.5 rounded bg-stone-100 text-stone-700 text-[10px] font-semibold font-mono">
+                        {payment.method}
+                      </span>
+                    </div>
+                    <span className="text-stone-400 font-mono text-[10px]">
+                      RCP-{payment.id.toUpperCase().slice(-6)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1 text-xs">
+                    <span className="text-[11px] text-stone-400 truncate max-w-[200px]">
+                      By: {payment.recordedBy} {payment.notes ? `• ${payment.notes}` : ''}
+                    </span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setReceiptOrder(order);
+                        setReceiptPayment(payment);
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-[#FAF6F0] hover:bg-[#232A5C] text-[#232A5C] hover:text-white border border-[#E4DCD0] text-[11px] font-semibold transition-colors inline-flex items-center gap-1 shadow-2xs"
+                    >
+                      <Printer className="w-3 h-3" />
+                      <span>Receipt</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {filteredPayments.length === 0 && (
+                <div className="py-12 text-center text-stone-400 p-4">
+                  No transactions found matching your criteria.
+                </div>
+              )}
             </div>
           </div>
         </div>

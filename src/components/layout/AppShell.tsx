@@ -27,7 +27,20 @@ import { OnboardingWizardModal } from '../auth/OnboardingWizardModal';
 import { LegalTermsModal } from '../auth/LegalTermsModal';
 
 import { Order, Customer } from '../../types';
-import { AlertCircle, CheckCircle2, Info, X } from 'lucide-react';
+import {
+  AlertCircle,
+  CheckCircle2,
+  Info,
+  X,
+  LayoutDashboard,
+  KanbanSquare,
+  ShoppingBag,
+  Users,
+  Menu,
+  Gift,
+  Printer,
+  Truck,
+} from 'lucide-react';
 import { UserRole } from '../../types';
 
 const ROLE_ALLOWED_TABS: Record<UserRole, NavTabId[]> = {
@@ -223,7 +236,7 @@ export const AppShell: React.FC = () => {
         />
 
         {/* Dynamic Page Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 min-w-0 p-3 sm:p-6 lg:p-8 overflow-y-auto pb-24 md:pb-8">
           {/* Dashboard Tab */}
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
@@ -505,8 +518,197 @@ export const AppShell: React.FC = () => {
         onClose={() => setIsLegalModalOpen(false)}
       />
 
+      {/* Mobile Bottom Navigation Bar (md:hidden) */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#232A5C] text-[#F7F2EA] border-t border-[#363E75] shadow-lg md:hidden">
+        <div className="grid grid-cols-5 h-16 items-center px-1">
+          {currentRole === 'agent' ? (
+            <>
+              <button
+                onClick={() => {
+                  setActiveTab('agents');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  activeTab === 'agents' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <Gift className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Portal</span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('tracking');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  (activeTab as string) === 'tracking' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <Truck className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Tracking</span>
+              </button>
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={() => setIsQuickEnquiryOpen(true)}
+                  className="w-10 h-10 rounded-full bg-[#E2573A] text-white flex items-center justify-center shadow-md -mt-3 border-2 border-[#232A5C]"
+                  title="Quick Enquiry"
+                >
+                  <span className="text-xl font-bold leading-none">+</span>
+                </button>
+              </div>
+              <button
+                onClick={() => setIsLegalModalOpen(true)}
+                className="flex flex-col items-center justify-center py-1 text-stone-300 hover:text-white transition-colors"
+              >
+                <Info className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Terms</span>
+              </button>
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  isMobileMenuOpen ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <Menu className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Menu</span>
+              </button>
+            </>
+          ) : currentRole === 'production' ? (
+            <>
+              <button
+                onClick={() => {
+                  setActiveTab('pipeline');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  activeTab === 'pipeline' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <KanbanSquare className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Pipeline</span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('orders');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  activeTab === 'orders' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <ShoppingBag className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Orders</span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('jobsheets');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  activeTab === 'jobsheets' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <Printer className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Job Sheets</span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('customers');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  activeTab === 'customers' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <Users className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Clients</span>
+              </button>
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className={`relative flex flex-col items-center justify-center py-1 transition-colors ${
+                  isMobileMenuOpen || !['pipeline', 'orders', 'jobsheets', 'customers'].includes(activeTab)
+                    ? 'text-[#E2573A]'
+                    : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <Menu className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Menu</span>
+                {!['pipeline', 'orders', 'jobsheets', 'customers'].includes(activeTab) && (
+                  <span className="absolute top-1 right-3 w-2 h-2 rounded-full bg-[#E2573A]" />
+                )}
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => {
+                  setActiveTab('dashboard');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  activeTab === 'dashboard' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <LayoutDashboard className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Dashboard</span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('pipeline');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  activeTab === 'pipeline' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <KanbanSquare className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Pipeline</span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('orders');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  activeTab === 'orders' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <ShoppingBag className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Orders</span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('customers');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex flex-col items-center justify-center py-1 transition-colors ${
+                  activeTab === 'customers' ? 'text-[#E2573A]' : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <Users className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Clients</span>
+              </button>
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className={`relative flex flex-col items-center justify-center py-1 transition-colors ${
+                  isMobileMenuOpen || !['dashboard', 'pipeline', 'orders', 'customers'].includes(activeTab)
+                    ? 'text-[#E2573A]'
+                    : 'text-stone-300 hover:text-white'
+                }`}
+              >
+                <Menu className="w-5 h-5" />
+                <span className="text-[10px] font-semibold mt-1">Menu</span>
+                {!['dashboard', 'pipeline', 'orders', 'customers'].includes(activeTab) && (
+                  <span className="absolute top-1 right-3 w-2 h-2 rounded-full bg-[#E2573A]" />
+                )}
+              </button>
+            </>
+          )}
+        </div>
+      </nav>
+
       {/* Toast Notification Container */}
-      <div className="fixed bottom-4 right-4 z-[70] flex flex-col gap-2 max-w-sm w-full pointer-events-none select-none">
+      <div className="fixed bottom-20 md:bottom-4 right-4 z-[70] flex flex-col gap-2 max-w-sm w-[calc(100vw-2rem)] sm:w-full pointer-events-none select-none">
         {toasts.map((toast) => (
           <div
             key={toast.id}

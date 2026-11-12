@@ -145,8 +145,41 @@ export const PipelineKanban: React.FC<PipelineKanbanProps> = ({
         </div>
       </div>
 
+      {/* Mobile Stage Quick-Jump Pill Bar */}
+      <div className="md:hidden">
+        <div className="flex items-center justify-between text-[11px] font-semibold text-stone-600 mb-1 px-1">
+          <span>Workshop Stages (12):</span>
+          <span className="text-[10px] text-stone-400">Tap to jump &bull; Swipe cards</span>
+        </div>
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
+          {stages.map((stage) => {
+            const count = filteredOrders.filter((o) => o.currentStage === stage.id).length;
+            return (
+              <button
+                key={stage.id}
+                onClick={() => {
+                  const el = document.getElementById(`kanban-stage-${stage.id}`);
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                  }
+                }}
+                className="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 bg-white hover:bg-[#FAF6F0] active:bg-[#232A5C] active:text-white border border-[#E4DCD0] rounded-lg text-xs font-medium text-[#232A5C] shadow-2xs transition-colors"
+              >
+                <span className="w-4 h-4 rounded-full bg-[#232A5C] text-white text-[9px] font-bold flex items-center justify-center shrink-0">
+                  {stage.stepNumber}
+                </span>
+                <span className="truncate max-w-[90px]">{stage.name}</span>
+                <span className="text-[10px] bg-stone-100 text-stone-600 px-1 py-0.2 rounded font-bold">
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Horizontal Kanban Scroll Columns (PRD Section 3 - 12 Stages) */}
-      <div className="overflow-x-auto pb-4 pt-1">
+      <div className="overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth">
         <div className="flex gap-3.5 min-w-[3200px]">
           {stages.map((stage) => {
             const columnOrders = filteredOrders.filter((o) => o.currentStage === stage.id);
@@ -156,6 +189,7 @@ export const PipelineKanban: React.FC<PipelineKanbanProps> = ({
             return (
               <div
                 key={stage.id}
+                id={`kanban-stage-${stage.id}`}
                 onDragOver={(e) => {
                   e.preventDefault();
                   e.dataTransfer.dropEffect = 'move';
@@ -179,7 +213,7 @@ export const PipelineKanban: React.FC<PipelineKanbanProps> = ({
                     }
                   }
                 }}
-                className={`w-72 shrink-0 rounded-xl border flex flex-col max-h-[75vh] transition-all duration-150 ${
+                className={`w-[85vw] sm:w-72 shrink-0 snap-center rounded-xl border flex flex-col max-h-[75vh] transition-all duration-150 ${
                   isOver
                     ? 'bg-[#EAE4D7] border-[#232A5C] ring-2 ring-[#232A5C]/20 shadow-md'
                     : 'bg-[#F2EDE4]/70 border-[#E4DCD0]'

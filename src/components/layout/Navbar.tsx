@@ -128,19 +128,24 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-50 bg-[#232A5C] text-[#F7F2EA] border-b border-[#363E75] shadow-xs select-none">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
         {/* Left: Brand & Mobile Toggle */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-[#F7F2EA] hover:bg-[#363E75] focus:outline-hidden"
+            className="md:hidden p-1.5 sm:p-2 rounded-lg text-[#F7F2EA] hover:bg-[#363E75] focus:outline-hidden touch-manipulation"
             aria-label="Toggle navigation menu"
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
 
           <a href="#" className="flex items-center gap-2">
-            <Logo variant="full" theme="dark" size="md" showTagline={false} />
+            <div className="hidden sm:block">
+              <Logo variant="full" theme="dark" size="md" showTagline={false} />
+            </div>
+            <div className="sm:hidden">
+              <Logo variant="stitch" theme="dark" size="sm" showTagline={false} />
+            </div>
           </a>
         </div>
 
@@ -176,7 +181,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="fixed inset-0 z-40"
                     onClick={() => setShowStudioDropdown(false)}
                   />
-                  <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white text-[#232A5C] rounded-xl shadow-2xl border border-[#E4DCD0] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="absolute left-0 sm:left-auto right-auto sm:right-0 mt-2 w-72 max-w-[calc(100vw-1.5rem)] bg-white text-[#232A5C] rounded-xl shadow-2xl border border-[#E4DCD0] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                     <div className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-stone-500 border-b border-stone-100 flex items-center justify-between">
                       <span>Super Admin: Switch Studio</span>
                       <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">Unlocked</span>
@@ -261,7 +266,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="fixed inset-0 z-40"
                     onClick={() => setShowRoleDropdown(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-72 bg-white text-[#232A5C] rounded-xl shadow-2xl border border-[#E4DCD0] py-2 z-50">
+                  <div className="absolute right-0 mt-2 w-72 max-w-[calc(100vw-1.5rem)] bg-white text-[#232A5C] rounded-xl shadow-2xl border border-[#E4DCD0] py-2 z-50">
                   <div className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-stone-500 border-b border-stone-100 flex items-center justify-between">
                     <span>Super Admin: Simulate Role</span>
                     <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">Unlocked</span>
@@ -309,22 +314,23 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#2D3672] text-xs font-medium border border-[#44529E]"
               title="Verified Studio Owner: Full control over reports, pipeline, pricing & staff"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-[#C9A24B]" />
+              <ShieldCheck className="w-3.5 h-3.5 text-[#C9A24B] shrink-0" />
               <span className="hidden md:inline text-[#E2DAD0]">Role:</span>
-              <span className="font-semibold text-white capitalize">Owner / Designer</span>
-              <span className="text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-700/50 px-1.5 py-0.2 rounded font-mono font-bold">Owner View</span>
+              <span className="hidden sm:inline font-semibold text-white capitalize">Owner / Designer</span>
+              <span className="sm:hidden font-semibold text-white capitalize text-xs">Owner</span>
+              <span className="hidden sm:inline text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-700/50 px-1.5 py-0.2 rounded font-mono font-bold">Owner View</span>
             </div>
           ) : (
             <div
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#2D3672] text-xs font-medium border border-[#44529E]"
               title={`Staff account locked to ${currentRole.replace('_', ' ').toUpperCase()} interface`}
             >
-              <UserCheck className="w-3.5 h-3.5 text-[#3F7D5C]" />
+              <UserCheck className="w-3.5 h-3.5 text-[#3F7D5C] shrink-0" />
               <span className="hidden md:inline text-[#E2DAD0]">Role:</span>
-              <span className="font-semibold text-white capitalize">
+              <span className="font-semibold text-white capitalize truncate max-w-[80px] sm:max-w-none">
                 {currentRole.replace('_', ' ')}
               </span>
-              <span className="text-[9px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded font-mono flex items-center gap-0.5">
+              <span className="hidden sm:inline-flex text-[9px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded font-mono items-center gap-0.5">
                 <Lock className="w-2.5 h-2.5" />
                 <span>Locked</span>
               </span>
@@ -408,7 +414,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="fixed inset-0 z-40"
                   onClick={() => setShowAccountMenu(false)}
                 />
-                <div className="absolute right-0 mt-2 w-64 bg-white text-[#232A5C] rounded-2xl shadow-2xl border border-[#E4DCD0] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-1.5rem)] bg-white text-[#232A5C] rounded-2xl shadow-2xl border border-[#E4DCD0] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                 <div className="px-4 py-2 border-b border-stone-100">
                   <div className="font-bold text-xs text-[#232A5C]">{currentUser.name}</div>
                   <div className="text-[10px] text-stone-500">
@@ -504,6 +510,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <button
                     onClick={() => {
                       setShowAccountMenu(false);
+                      resetAllData();
+                    }}
+                    className="sm:hidden w-full text-left px-4 py-2 text-xs flex items-center gap-2 hover:bg-[#FAF6F0] text-stone-600 font-medium"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-stone-400" />
+                    <span>Reset Demo Data</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowAccountMenu(false);
                       signOut();
                       onOpenAuth('signin');
                     }}
@@ -518,10 +534,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
           </div>
 
-          {/* Demo Reset Button for testing */}
+          {/* Demo Reset Button for testing (desktop) */}
           <button
             onClick={resetAllData}
-            className="p-1.5 rounded-lg text-stone-400 hover:text-white hover:bg-[#363E75] transition-colors"
+            className="hidden sm:flex p-1.5 rounded-lg text-stone-400 hover:text-white hover:bg-[#363E75] transition-colors"
             title="Reset to fresh demo data"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -554,7 +570,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="fixed inset-0 z-40"
                     onClick={() => setShowNotifications(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-80 bg-white text-[#232A5C] rounded-xl shadow-2xl border border-[#E4DCD0] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-1.5rem)] bg-white text-[#232A5C] rounded-xl shadow-2xl border border-[#E4DCD0] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   <div className="px-4 py-2 border-b border-stone-100 flex items-center justify-between">
                     <div className="font-semibold text-sm">Studio Alerts</div>
                     <span className="text-xs text-stone-500">{notificationCount} pending</span>

@@ -276,7 +276,8 @@ export const OrdersTableView: React.FC<OrdersTableViewProps> = ({
 
       {/* Orders Table (PRD Section 4.3 DASH-2) */}
       <div className="bg-white rounded-xl border border-[#E4DCD0] shadow-2xs overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="bg-[#ECE5DA] text-[#232A5C] font-serif border-b border-[#E4DCD0]">
@@ -571,6 +572,130 @@ export const OrdersTableView: React.FC<OrdersTableViewProps> = ({
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Responsive Cards View (md:hidden) */}
+        <div className="md:hidden divide-y divide-stone-100">
+          {filtered.map((order) => {
+            const totalPaid = order.payments.reduce((sum, p) => sum + p.amount, 0);
+            const balance = order.totalPrice - totalPaid;
+            const isDelivered = order.currentStage === 'delivered';
+            const cd = calculateDeliveryCountdown(order.expectedDeliveryDate, isDelivered);
+            const isOverdue = cd.urgency === 'overdue';
+
+            return (
+              <div
+                key={order.id}
+                onClick={() => onOpenOrder(order)}
+                className={`p-3.5 space-y-2.5 transition-colors active:bg-[#FAF6F0] cursor-pointer ${
+                  isOverdue ? 'bg-rose-50/30' : ''
+                }`}
+              >
+                {/* Header: Order #, Priority, Stage */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono font-bold text-sm text-[#232A5C]">{order.orderNumber}</span>
+                    <PriorityBadge priority={order.priority} />
+                  </div>
+                  <StageBadge stageId={order.currentStage} />
+                </div>
+
+                {/* Client info & occasion */}
+                <div className="flex items-center justify-between text-xs">
+                  <div>
+                    <span className="font-bold text-[#232A5C]">{order.customerName}</span>
+                    <span className="text-stone-500 ml-1.5">&bull; {order.occasion}</span>
+                  </div>
+                  {currentRole !== 'production' && (
+                    <div className="text-right">
+                      <div className="font-serif font-bold text-[#232A5C]">{formatNaira(order.totalPrice)}</div>
+                      {balance > 0 ? (
+                        <div className="text-[10px] text-[#A07A28] font-bold">Bal: {formatNaira(balance)}</div>
+                      ) : (
+                        <div className="text-[10px] text-emerald-600 font-semibold">Fully Paid</div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Items summary */}
+                <div className="text-[11px] text-stone-600 bg-[#FAF6F0] p-2 rounded-lg flex items-center justify-between">
+                  <span className="truncate max-w-[200px]">
+                    {order.items.map((i) => i.type).join(', ')}
+                  </span>
+                  <span className="text-stone-400 shrink-0 font-medium">
+                    {order.assignedStaff || 'Unassigned'}
+                  </span>
+                </div>
+
+                {/* Due Date & Delivery Countdown */}
+                <div className="flex items-center justify-between pt-1">
+                  <div className="flex items-center gap-1 text-[11px] text-stone-600">
+                    <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                    <span>{formatDate(order.expectedDeliveryDate)}</span>
+                  </div>
+                  <DeliveryCountdownBadge
+                    expectedDeliveryDate={order.expectedDeliveryDate}
+                    isDelivered={isDelivered}
+                    size="sm"
+                  />
+                </div>
+
+                {/* Mobile Action Buttons */}
+                <div
+                  className="flex items-center justify-between pt-1.5 border-t border-stone-100"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-1">
+                    {order.customerPhone && (
+                      <a
+                        href={`tel:${order.customerPhone}`}
+                        className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700"
+                        title="Call Customer"
+                      >
+                        <Phone className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                    {currentRole !== 'production' && currentRole !== 'dispatch' && (
+                      <button
+                        onClick={() => onPrintJobSheet(order)}
+                        className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700"
+                        title="Print Job Sheet"
+                      >
+                        <Printer className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    {currentRole === 'dispatch' && order.currentStage === 'ready_for_delivery' && (
+                      <button
+                        onClick={() => updateOrderStatus(order.id, 'delivered', 'Dispatched to customer')}
+                        className="px-2.5 py-1 bg-[#3F7D5C] text-white rounded-lg text-xs font-semibold flex items-center gap-1"
+                      >
+                        <Truck className="w-3.5 h-3.5" />
+                        <span>Deliver</span>
+                      </button>
+                    )}
+                    <button
+                      onClick={() => onOpenOrder(order)}
+                      className="px-3 py-1 bg-[#232A5C] text-white rounded-lg text-xs font-semibold flex items-center gap-1"
+                    >
+                      <span>View</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          {filtered.length === 0 && (
+            <div className="text-center py-12 text-stone-400 p-4">
+              <p className="font-serif text-sm text-stone-600">No matching orders found</p>
+              <p className="text-xs text-stone-400 mt-1">Adjust your filters above.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

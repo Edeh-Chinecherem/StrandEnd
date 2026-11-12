@@ -212,7 +212,7 @@ export const OnboardingWizardModal: React.FC<OnboardingWizardModalProps> = ({
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs select-none">
       <div className="bg-white rounded-2xl border border-[#E4DCD0] shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-[#E4DCD0] bg-[#FAF6F0] flex items-center justify-between">
+        <div className="p-4 sm:p-5 border-b border-[#E4DCD0] bg-[#FAF6F0] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-[#232A5C] text-white">
               <Sparkles className="w-5 h-5 text-[#E2573A]" />
@@ -235,7 +235,7 @@ export const OnboardingWizardModal: React.FC<OnboardingWizardModalProps> = ({
         </div>
 
         {/* Step Progress Bar */}
-        <div className="px-5 py-3 bg-[#ECE5DA] border-b border-[#E4DCD0] flex items-center justify-between text-xs font-serif font-bold text-[#232A5C]">
+        <div className="px-5 py-3 bg-[#ECE5DA] border-b border-[#E4DCD0] flex items-center justify-between text-xs font-serif font-bold text-[#232A5C] shrink-0 overflow-x-auto whitespace-nowrap scrollbar-none">
           <span className={currentStep >= 1 ? 'text-[#E2573A]' : 'opacity-40'}>
             1. Studio Profile
           </span>
@@ -664,7 +664,7 @@ export const OnboardingWizardModal: React.FC<OnboardingWizardModalProps> = ({
         </div>
 
         {/* Modal Navigation Buttons */}
-        <div className="p-4 border-t border-[#E4DCD0] bg-[#FAF6F0] flex items-center justify-between">
+        <div className="p-4 border-t border-[#E4DCD0] bg-[#FAF6F0] flex items-center justify-between shrink-0">
           {currentStep > 1 ? (
             <button
               type="button"
